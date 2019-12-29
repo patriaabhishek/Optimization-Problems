@@ -10,7 +10,7 @@ declarations
   z : array(1..100) of mpvar
   end-declarations
 
-initializations from 'regression.dat'
+initializations from '1. Robust Regression - Data.dat'
 	x y
 end-initializations
 
