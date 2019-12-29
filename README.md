@@ -1,5 +1,5 @@
 # Optimization-Problems
-This repository contains Xpress codes of my attempts at some Optimization Problems
+This repository contains Xpress/ PuLP codes of my attempts at some Optimization Problems
 
 1. Robust Regression
 2. Sudoku Solver
