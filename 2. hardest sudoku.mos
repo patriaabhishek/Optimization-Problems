@@ -1,0 +1,103 @@
+model Sudoku_Solver
+uses "mmxprs";
+
+declarations
+  Objective : linctr
+  num = 1 .. 9
+  num1 = 1 .. 3
+  num2 = 4 .. 6
+  num3 = 7 .. 9
+  x :  array(num, num, num) of mpvar !The format is (row, column, cell value)
+end-declarations
+
+!Given values in the Sudoku Puzzle
+!This is one of the hardest Sudoku Puzzle out there
+!x(p,q,r) = 1 means that the value at p,q is r
+
+x(1,1,8) = 1
+x(2,3,3) = 1
+x(2,4,6) = 1
+x(3,2,7) = 1
+x(3,5,9) = 1
+x(3,7,2) = 1
+x(4,2,5) = 1
+x(4,6,7) = 1
+x(5,5,4) = 1
+x(5,6,5) = 1
+x(5,7,7) = 1
+x(6,4,1) = 1
+x(6,8,3) = 1
+x(7,3,1) = 1
+x(7,8,6) = 1
+x(7,9,8) = 1
+x(8,3,8) = 1
+x(8,4,5) = 1
+x(8,8,1) = 1
+x(9,2,9) = 1
+x(9,7,4) = 1
+
+!Objective
+Objective := 1
+
+forall(i in num, j in num, k in num)
+    x(i,j,k) is_binary
+
+!Constraints for uniqueness in rows and columns
+
+forall(i in num, j in num)
+    sum(k in num) x(i,j,k) = 1
+
+forall(j in num, k in num)
+    sum(i in num) x(i,j,k) = 1
+
+forall(i in num, k in num)
+    sum(j in num) x(i,j,k) = 1
+
+
+
+!Constraint for uniqueness in each 3x3 subgrid
+
+forall(k in num)
+    sum(i in num1, j in num1) x(i,j,k) = 1
+
+forall(k in num)
+    sum(i in num1, j in num2) x(i,j,k) = 1
+
+forall(k in num)
+    sum(i in num1, j in num3) x(i,j,k) = 1
+
+
+forall(k in num)
+    sum(i in num2, j in num1) x(i,j,k) = 1
+
+forall(k in num)
+    sum(i in num2, j in num2) x(i,j,k) = 1
+
+forall(k in num)
+    sum(i in num2, j in num3) x(i,j,k) = 1
+
+
+forall(k in num)
+    sum(i in num3, j in num1) x(i,j,k) = 1
+
+forall(k in num)
+    sum(i in num3, j in num2) x(i,j,k) = 1
+
+forall(k in num)
+    sum(i in num3, j in num3) x(i,j,k) = 1
+
+
+!Running the solver
+writeln("Begin running model")
+minimize(Objective)
+writeln("End running model")
+
+!Printing the solution
+writeln("----       -----")
+writeln("Cell       Value")
+writeln("----       -----")
+forall(i in num, j in num, k in num)
+	   if( getsol(x(i,j,k)) = 1) then
+	        writeln("(",i,",",j,")  =    ",k)
+	   end-if
+end-model
